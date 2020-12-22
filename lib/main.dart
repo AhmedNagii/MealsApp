@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'DeliMeals',
       theme: ThemeData(
-        primarySwatch: Colors.grey,
+        primarySwatch: Colors.pink,
         accentColor: Color.fromARGB(225, 249, 170, 51),
         // canvasColor: Color.fromARGB(225, 254, 229, 1),
         fontFamily: "Raleway",
