@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+
 import './categories_screen.dart';
 import './favorites_screen.dart';
+
+import '../widgets/drawer_content.dart';
 
 class TabsScreen extends StatefulWidget {
   @override
@@ -8,29 +11,48 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
+  final List<Map<String, Object>> _pages = [
+    {
+      "page": CategoriesScreen(),
+      "title": "Categories",
+    },
+    {
+      "page": FavoritesScreen(),
+      "title": "Favorites",
+    },
+  ];
+  int _selectedPageIndex = 0;
+
+  void _selectePage(int index) {
+    setState(() {
+      _selectedPageIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      //  initialIndex: 1,  we can use it to choose which screen has to start
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("meals"),
-          bottom: TabBar(tabs: <Widget>[
-            Tab(
-              icon: Icon(Icons.category),
-              text: "Categories",
-            ),
-            Tab(
-              icon: Icon(Icons.favorite),
-              text: "Favorites",
-            ),
-          ]),
-        ),
-        body: TabBarView(children: <Widget>[
-          CategoriesScreen(),
-          FavoritesScreen(),
-        ]),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_pages[_selectedPageIndex]["title"]),
+      ),
+      drawer: DrawerContent(),
+      body: _pages[_selectedPageIndex]["page"],
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: _selectePage,
+        backgroundColor: Theme.of(context).primaryColor,
+        currentIndex: _selectedPageIndex,
+        selectedItemColor: Theme.of(context).accentColor,
+        unselectedItemColor: Colors.white,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.category),
+            title: Text("Categories"),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.stars),
+            title: Text("Favorites"),
+          ),
+        ],
       ),
     );
   }

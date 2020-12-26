@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:meals_app/screens/filtersScreen.dart';
 import './screens/taps_screen.dart';
 import 'screens/categories_screen.dart';
 import 'screens/category_meals_screen.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'DeliMeals',
       theme: ThemeData(
-        primarySwatch: Colors.pink,
+        primarySwatch: Colors.red,
         accentColor: Color.fromARGB(225, 249, 170, 51),
         // canvasColor: Color.fromARGB(225, 254, 229, 1),
         fontFamily: "Raleway",
@@ -32,10 +33,13 @@ class MyApp extends StatelessWidget {
                 fontFamily: "RobotoCondensed",
                 fontWeight: FontWeight.bold)),
       ),
-      home: TabsScreen(),
+      initialRoute: "/", //default is "/"
+      // home: TabsScreen(),
       routes: {
+        "/": (ctx) => TabsScreen(),
         CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(),
         MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
+        FiltersScreen.routName: (ctx) => FiltersScreen(),
       },
 
       // if we do not have onGenerateRoute even or unknown rout so,
