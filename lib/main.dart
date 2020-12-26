@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import './screens/taps_screen.dart';
 import 'screens/categories_screen.dart';
 import 'screens/category_meals_screen.dart';
+import 'screens/meal_detail_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,10 +32,25 @@ class MyApp extends StatelessWidget {
                 fontFamily: "RobotoCondensed",
                 fontWeight: FontWeight.bold)),
       ),
-      home: CategoriesScreen(),
+      home: TabsScreen(),
       routes: {
         CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(),
+        MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
+      },
+
+      // if we do not have onGenerateRoute even or unknown rout so,
+      // we stil can show something on he  screen
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(builder: (ctx) => CategoryMealsScreen());
       },
     );
   }
 }
+
+//it can be used if we want handle case have an issue
+// to move to another page we do not ecoect
+// onGenerateRoute: (settings) {
+//   print(settings.arguments);
+//   if(settings.name == "/meal-detail"){
+//     return MaterialPageRoute(builder: (ctx)=> CategoriesScreen());
+//   }}
