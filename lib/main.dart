@@ -1,9 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:meals_app/screens/filtersScreen.dart';
-import './screens/taps_screen.dart';
-import 'screens/categories_screen.dart';
+import 'dummy_data.dart';
+import 'models/meal.dart';
+import 'screens/filtersScreen.dart';
+import 'screens/taps_screen.dart';
 import 'screens/category_meals_screen.dart';
 import 'screens/meal_detail_screen.dart';
 
@@ -11,7 +12,42 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  //this map to save user inpute which filters has been used
+  Map<String, bool> _filters = {
+    "gluten": false,
+    "lactose": false,
+    "vegan": false,
+    "vegetarian": false,
+  };
+  List<Meal> _availableMeals = DUMMY_MEALS;
+
+  void _setFilters(Map<String, bool> filterData) {
+    setState(() {
+      _filters = filterData;
+      _availableMeals = DUMMY_MEALS.where((meal) {
+        if (_filters["gluten"] && !meal.isGlutenFree) {
+          return false;
+        }
+        if (_filters["lactose"] && !meal.isLactoseFree) {
+          return false;
+        }
+        if (_filters["Vegetarian"] && !meal.isVegetarian) {
+          return false;
+        }
+        if (_filters["vegan"] && !meal.isVegan) {
+          return false;
+        }
+        return true;
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,15 +73,16 @@ class MyApp extends StatelessWidget {
       // home: TabsScreen(),
       routes: {
         "/": (ctx) => TabsScreen(),
-        CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(),
+        CategoryMealsScreen.routeName: (ctx) =>
+            CategoryMealsScreen(_availableMeals),
         MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
-        FiltersScreen.routName: (ctx) => FiltersScreen(),
+        FiltersScreen.routName: (ctx) => FiltersScreen(_filters, _setFilters),
       },
 
       // if we do not have onGenerateRoute even or unknown rout so,
       // we stil can show something on he  screen
       onUnknownRoute: (settings) {
-        return MaterialPageRoute(builder: (ctx) => CategoryMealsScreen());
+        // return MaterialPageRoute(builder: (ctx) => CategoryMealsScreen());
       },
     );
   }
