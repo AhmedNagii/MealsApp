@@ -25,11 +25,14 @@ class _MyAppState extends State<MyApp> {
     "vegan": false,
     "vegetarian": false,
   };
+
   List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favoritedMeals = [];
 
   void _setFilters(Map<String, bool> filterData) {
     setState(() {
       _filters = filterData;
+
       _availableMeals = DUMMY_MEALS.where((meal) {
         if (_filters["gluten"] && !meal.isGlutenFree) {
           return false;
@@ -37,15 +40,35 @@ class _MyAppState extends State<MyApp> {
         if (_filters["lactose"] && !meal.isLactoseFree) {
           return false;
         }
-        if (_filters["Vegetarian"] && !meal.isVegetarian) {
+        if (_filters["vegan"] && !meal.isVegan) {
           return false;
         }
-        if (_filters["vegan"] && !meal.isVegan) {
+        if (_filters["vegetarian"] && !meal.isVegetarian) {
           return false;
         }
         return true;
       }).toList();
     });
+  }
+
+  void _toggleFavorite(String mealId) {
+    final existingIndex =
+        _favoritedMeals.indexWhere((meal) => meal.id == mealId);
+    if (existingIndex >= 0) {
+      setState(() {
+        _favoritedMeals.removeAt(existingIndex);
+      });
+    } else {
+      setState(() {
+        _favoritedMeals.add(
+          DUMMY_MEALS.firstWhere((meal) => meal.id == mealId),
+        );
+      });
+    }
+  }
+
+  bool _isMealFavorite(String id) {
+    return _favoritedMeals.any((fuck) => fuck.id == id);
   }
 
   @override
@@ -72,18 +95,19 @@ class _MyAppState extends State<MyApp> {
       initialRoute: "/", //default is "/"
       // home: TabsScreen(),
       routes: {
-        "/": (ctx) => TabsScreen(),
+        "/": (ctx) => TabsScreen(_favoritedMeals),
         CategoryMealsScreen.routeName: (ctx) =>
             CategoryMealsScreen(_availableMeals),
-        MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
+        MealDetailScreen.routeName: (ctx) =>
+            MealDetailScreen(_toggleFavorite, _isMealFavorite),
         FiltersScreen.routName: (ctx) => FiltersScreen(_filters, _setFilters),
       },
 
       // if we do not have onGenerateRoute even or unknown rout so,
       // we stil can show something on he  screen
-      onUnknownRoute: (settings) {
-        // return MaterialPageRoute(builder: (ctx) => CategoryMealsScreen());
-      },
+      // onUnknownRoute: (settings) {
+      //   // return MaterialPageRoute(builder: (ctx) => CategoryMealsScreen());
+      // },
     );
   }
 }

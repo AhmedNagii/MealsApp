@@ -51,7 +51,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
-              Map<String, bool> _selectedFilters = {
+              final _selectedFilters = {
                 "gluten": _glutenFree,
                 "lactose": _lactoseFree,
                 "vegan": _vegan,

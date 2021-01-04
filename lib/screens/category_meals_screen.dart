@@ -25,7 +25,6 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
           ModalRoute.of(context).settings.arguments as Map<String, String>;
       categoryTitle = routsArgs["title"];
       final categoryId = routsArgs["id"];
-
       displayedMeal = widget.availbleMeals.where((meal) {
         return meal.categories.contains(categoryId);
       }).toList();
@@ -35,11 +34,11 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
     super.didChangeDependencies();
   }
 
-  void _removeItem(String mealId) {
-    setState(() {
-      displayedMeal.removeWhere((meal) => meal.id == mealId);
-    });
-  }
+  // void _removeItem(String mealId) {
+  //   setState(() {
+  //     displayedMeal.removeWhere((meal) => meal.id == mealId);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,6 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
               imageUrl: displayedMeal[index].imageUrl,
               affordability: displayedMeal[index].affordability,
               complexity: displayedMeal[index].complexity,
-              removeItem: _removeItem,
             );
           },
           itemCount: displayedMeal.length,
